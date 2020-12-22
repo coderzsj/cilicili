@@ -44,9 +44,9 @@ public class CloudApplicationTests {
     @Test
     public void selectPage() {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.ge("age",26);
+        wrapper.ge("uuid",26);
         Page<User>  page      = new Page<>(1, 2);
-        IPage<User> userIPage = userMapper.selectPage(page, wrapper);
+        IPage<User> userIPage = userMapper.selectPage(page,wrapper);
         System.out.println("总条数"+userIPage.getTotal());
         System.out.println("总页数"+userIPage.getPages());
 
