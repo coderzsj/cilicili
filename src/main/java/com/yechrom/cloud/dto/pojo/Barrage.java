@@ -3,7 +3,7 @@ package com.yechrom.cloud.dto.pojo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Data
 public class Barrage implements Serializable {
@@ -13,7 +13,7 @@ public class Barrage implements Serializable {
 
     private Integer videoId;
 
-    private ZonedDateTime sendtime;
+    private Date sendtime;
 
     private String content;
 

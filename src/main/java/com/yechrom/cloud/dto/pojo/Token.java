@@ -2,7 +2,7 @@ package com.yechrom.cloud.dto.pojo;
 
 import lombok.Data;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Data
 public class Token {
@@ -12,9 +12,9 @@ public class Token {
 
     private String token;
 
-    private ZonedDateTime applytime;
+    private Date applytime;
 
-    private ZonedDateTime expiretime;
+    private Date expiretime;
 
     private Integer countAuth;
 

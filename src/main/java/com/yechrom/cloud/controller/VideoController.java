@@ -1,6 +1,7 @@
 package com.yechrom.cloud.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yechrom.cloud.dto.pojo.Video;
 import com.yechrom.cloud.dto.vo.ShowAllSellHouseVo;
 import com.yechrom.cloud.dto.vo.response.ResponseBaseVo;
@@ -8,6 +9,7 @@ import com.yechrom.cloud.dto.vo.response.ResponseErrorVo;
 import com.yechrom.cloud.dto.vo.response.ResponseVo;
 import com.yechrom.cloud.service.UserService;
 import com.yechrom.cloud.service.VideoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,40 +29,61 @@ import java.util.Map;
  * @Date 2020/12/15 16:35
  * @Author zsj
  */
-@RestController("video1")
+@RestController("video")
 @Slf4j
+@Api(tags = "视频Controller")
 public class VideoController {
     @Autowired
     UserService  userService;
     @Autowired
     VideoService videoService;
 
-//    @PostMapping("/user/login")
-//    @ResponseBody
-//    @ApiOperation("根据id获取视频信息")
-//    public ResponseBaseVo findVideoById(Integer id) {
-//        log.info("调用视频接口 , 传入的参数为 : {}", id);
-//        Video video = videoService.findVideoById(id);
-//        if (video == null) {
-////            result.put("status", "failure");
-//////            result.put("msg", "找不到该视频");
-//            ResponseErrorVo response = new ResponseErrorVo();
-//            response.setErrorcode(0);
-//            response.setError("找不到该视频~");
-//        }
-////            result.put("status", "success");
-////            result.put("video", video);
-//        //成功时返回
-//        ResponseVo response = new ResponseVo();
-//        JSONObject result   = new JSONObject();
-//        result.put("video", video);
-//        response.setErrorcode(1);
-//        response.setData(result);
-//        return response;
-//
-//    }
+    @PostMapping("/findVideoById")
+    @ResponseBody
+    @ApiOperation("根据id获取视频信息")
+    public ResponseBaseVo findVideoById(Integer id) {
+        log.info("调用视频接口 , 传入的参数为 : {}", id);
+        Video video = videoService.findVideoById(id);
+        if (video == null) {
+//            result.put("status", "failure");
+////            result.put("msg", "找不到该视频");
+            ResponseErrorVo response = new ResponseErrorVo();
+            response.setErrorcode(0);
+            response.setError("找不到该视频~");
+        }
+//            result.put("status", "success");
+//            result.put("video", video);
+        //成功时返回
+        ResponseVo response = new ResponseVo();
+        JSONObject result   = new JSONObject();
+        result.put("video", video);
+        response.setErrorcode(1);
+        response.setData(result);
+        return response;
 
-    @RequestMapping("/add")
+    }
+
+    @PostMapping("/show")
+    @ResponseBody
+    @ApiOperation("分页获取视频信息")
+    public ResponseBaseVo showVideos(@RequestBody ShowAllSellHouseVo requestVo) {
+        Page<Video>  page      = new Page<>(requestVo.getPage(), requestVo.getLimit());
+        Page<Video> videoPage = videoService.showVideos(page);
+        if (videoPage == null) {
+            ResponseErrorVo response = new ResponseErrorVo();
+            response.setErrorcode(0);
+            response.setError("找不到视频~");
+        }
+        ResponseVo response = new ResponseVo();
+        JSONObject result   = new JSONObject();
+        result.put("video", videoPage);
+        response.setErrorcode(1);
+        response.setData(result);
+        return response;
+    }
+
+
+    @PostMapping("/add")
     @ResponseBody
     public ResponseBaseVo addVideo(@RequestBody Video video) {
         log.info("调用视频接口 , 传入的参数为 : {}", video.toString());
@@ -90,7 +113,7 @@ public class VideoController {
         ResponseVo response = new ResponseVo();
 //        video.setUploadUserid(user.getId());
         video.setId(null);
-        video.setUploadTime(ZonedDateTime.now());
+        video.setUploadTime(new Date());
         video.setCountPlay(0);
         video.setCountLike(0);
         videoService.addVideo(video);
@@ -102,7 +125,7 @@ public class VideoController {
         return response;
     }
 
-    @RequestMapping("/play")
+    @PostMapping("/play")
     @ResponseBody
     public ResponseBaseVo playVideo(Integer id) {
         Video          video = videoService.findVideoById(id);
@@ -115,7 +138,7 @@ public class VideoController {
         return response;
     }
 
-    @RequestMapping("/like")
+    @PostMapping("/like")
     @ResponseBody
     public ResponseBaseVo likeVideo(Integer id) {
         Video          video    = videoService.findVideoById(id);
@@ -127,16 +150,6 @@ public class VideoController {
         return response;
     }
 
-//    @RequestMapping("/show")
-//    @ResponseBody
-//    public ResponseBaseVo showVideos(@RequestBody ShowAllSellHouseVo requestVo) {
-//        log.info("调用了展示在租房源接口 , 传入报文为: {}" , requestVo);
-//        Map<String, Serializable> result   = new HashMap<>();
-//        ArrayList<Video>          videos   = (ArrayList<Video>) videoService.showVideos();
-//        PageInfo<Video>           pageInfo = new PageInfo<>(videos);
-//        result.put("page", pageInfo);
-//        return result;
-//    }
 //
 //    @RequestMapping("/find")
 //    @ResponseBody
@@ -153,15 +166,4 @@ public class VideoController {
 //        return result;
 //    }
 //
-//    @ResponseBody
-//    @ExceptionHandler({Exception.class})
-//    public Map<String, Serializable> exceptionHandle(Exception e) {
-//        Map<String, Serializable> result = new HashMap<>();
-//        result.put("status", "failure");
-//        result.put("msg", "参数错误");
-//        Logger logger = LoggerFactory.getLogger(this.getClass());
-//        logger.error(e.getMessage());
-//        logger.error(e.getLocalizedMessage());
-//        return result;
-//    }
 }

@@ -7,7 +7,7 @@
 <application generated-by="intellij" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://update.zeroturnaround.com/jrebel/rebel-2_1.xsd">
 
 	<classpath>
-		<dir name="E:/房屋中介管理系统/房屋中介管理系统 后端/cloud/target/classes">
+		<dir name="E:/cilicili-master/backend/target/classes">
 		</dir>
 	</classpath>
 

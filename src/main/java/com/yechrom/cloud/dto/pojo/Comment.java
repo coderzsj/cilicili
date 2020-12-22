@@ -3,7 +3,7 @@ package com.yechrom.cloud.dto.pojo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Data
 public class Comment {
@@ -15,7 +15,7 @@ public class Comment {
 
     private String content;
 
-    private ZonedDateTime sendtime;
+    private Date sendtime;
 
     private Integer countLike;
 }

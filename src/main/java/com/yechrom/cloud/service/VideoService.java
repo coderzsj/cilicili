@@ -1,9 +1,10 @@
 package com.yechrom.cloud.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yechrom.cloud.dto.mapper.VideoMapper;
-import com.yechrom.cloud.dto.pojo.SellHouse;
 import com.yechrom.cloud.dto.pojo.Video;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,8 +16,8 @@ import java.util.List;
  */
 @Component
 public class VideoService  {
+    @Autowired
     VideoMapper videoMapper;
-
 
     public Video findVideoById(Integer id) {
         return videoMapper.selectById(id);
@@ -37,8 +38,11 @@ public class VideoService  {
     }
 
 
-    public List<Video> showVideos() {
-        return videoMapper.selectList(new QueryWrapper<>());
+    public Page<Video> showVideos(Page<Video> page) {
+        QueryWrapper<Video> wrapper = new QueryWrapper<>();
+        wrapper.eq("id",1);
+        Page<Video> videoPage = videoMapper.selectPage(page, wrapper);
+        return videoPage;
     }
 
 
