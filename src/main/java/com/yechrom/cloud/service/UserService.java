@@ -134,7 +134,6 @@ public class UserService {
      * @return
      */
     public List<ShowUserVo> show() {
-
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("is_delete", 0);
         List<User> users = user.selectByMap(columnMap);
