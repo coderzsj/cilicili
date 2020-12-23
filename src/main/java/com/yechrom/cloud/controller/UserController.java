@@ -28,19 +28,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    /**
-     *
-     * @param loginVo 登录接口
-     * @return
-     * @throws Exception
-     */
     @PostMapping("/user/login")
     @ResponseBody
-    @ApiOperation("根据id获取用户信息")
+    @ApiOperation("login")
     public ResponseBaseVo login(@RequestBody LoginVo loginVo) throws Exception {
         log.info("调用登录接口 , 传入的参数为 : {}" , loginVo.toString());
         String token = userService.login(loginVo);
-        //判断是否账号或者密码错误
         if (token.length() == 0){
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
@@ -64,17 +57,15 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/user/info")
+    @PostMapping("/user/info")
     @ResponseBody
-    @CheckToken
     @ApiOperation("根据token查询用户的接口")
-    public ResponseBaseVo getinfo(@RequestParam(value = "token") String token) throws Exception {
+    public ResponseBaseVo getinfo( String token) throws Exception {
         log.info("用户调用获取信息接口 , 传入的参数为 token = {}" , token);
         JSONObject info = userService.getInfo(token);
         ResponseVo response = new ResponseVo();
         response.setErrorcode(1);
         response.setData(info);
-
         return response;
     }
 
@@ -108,22 +99,17 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/show")
-
     @ResponseBody
     @CheckToken
     public ResponseBaseVo showUsers(){
-
         log.info("调用了获取所有人员信息的接口.");
-
         List<User> users = userService.show();
-
         ResponseVo response = new ResponseVo();
         JSONObject data = new JSONObject();
         data.put("list" , users);
         data.put("total" , users.size());
         response.setErrorcode(1);
         response.setData(data);
-
         log.info("查看所有的用户接口 , 返回的报文为" + response.toString());
         return response;
     }
@@ -180,13 +166,9 @@ public class UserController {
     @CheckToken
     @ApiOperation("添加用户的接口")
     public ResponseBaseVo addUser(@RequestBody AddUserVo userVo) throws Exception {
-
         log.info("进入了添加用户信息的接口 , 传入的报文为: {}" , userVo.toString());
-
         int result = userService.addUser(userVo);
-
         ResponseBaseVo response;
-
         if (result ==0){
             response = new ResponseErrorVo();
             response.setErrorcode(0);

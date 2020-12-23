@@ -33,20 +33,14 @@ public class UserService {
     @Autowired
     private RedisUtil redisUtil;
 
-    public List<User> getUsers() {
-        Map<String, Object> columnMap2 = new HashMap<>();
-        return userMapper.selectList(new QueryWrapper<User>().eq("uuid", "d84162ee1ce64d2fb361a4012a6d7d0c"));
-    }
-
     /**
-     * 登录接口调用的业务类
+     * 登陆
      *
      * @param loginVo
      * @return
      * @throws Exception
      */
     public String login(LoginVo loginVo) throws Exception {
-
         if (StringUtils.isAllBlank(loginVo.getUsername()) || StringUtils.isAllBlank(loginVo.getPassword())) {
             throw new UsernameOrPasswordIsNullException("用户名或密码为空");
         }
@@ -66,7 +60,7 @@ public class UserService {
     }
 
     /**
-     * 从redis中获取用户信息
+     * 从缓存获取用户信息
      *
      * @param token
      * @return
@@ -74,7 +68,6 @@ public class UserService {
     public JSONObject getInfo(String token) throws Exception {
         String userInfo = "";
         userInfo = redisUtil.get(token);
-
         if (userInfo.length() == 0) {
             throw new UsernameOrPasswordIsNullException("reids中不存在info~");
         }
@@ -102,20 +95,10 @@ public class UserService {
         return 0;
     }
 
-    /**
-     * 查询所有的用户
-     *
-     * @return
-     */
     public List<User> show() {
         return userMapper.selectList(new QueryWrapper<>());
     }
 
-    /**
-     * 更新用户信息
-     *
-     * @return
-     */
     public int updateUser(UpdateUserVo userVo) throws Exception {
         if (!StringUtils.isNotBlank(userVo.getPassword()) || !StringUtils.isNotBlank(userVo.getName())) {
             throw new ParamIsNullException("姓名或密码不能为空~");
@@ -126,24 +109,10 @@ public class UserService {
         return userMapper.update(userPo, new UpdateWrapper<User>().eq("id", userVo.getId()));
     }
 
-    /**
-     * 删除用户
-     *
-     * @param uuid
-     * @return
-     * @throws Exception
-     */
     public int deleteUser(String id) throws Exception {
         return userMapper.delete(new QueryWrapper<User>().eq("id",id));
     }
 
-    /**
-     * 添加用户
-     *
-     * @param userVo
-     * @return
-     * @throws Exception
-     */
     public int addUser(AddUserVo userVo) throws Exception {
         User userPo = new User();
         userPo.setPassword(userVo.getPassword());
