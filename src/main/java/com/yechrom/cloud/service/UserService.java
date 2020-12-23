@@ -13,11 +13,14 @@ import com.yechrom.cloud.exception.exceptions.TokenNullException;
 import com.yechrom.cloud.exception.exceptions.UsernameOrPasswordIsNullException;
 import com.yechrom.cloud.util.RedisUtil;
 import com.yechrom.cloud.util.UUIDUtil;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +70,7 @@ public class UserService {
     public JSONObject getInfo(String token) throws Exception {
         String userInfo = "";
         userInfo = redisUtil.get(token);
-        if (userInfo.length() == 0) {
+        if (StringUtils.isEmpty(userInfo)) {
             throw new UsernameOrPasswordIsNullException("reids中不存在info~");
         }
         return JSONObject.parseObject(userInfo);

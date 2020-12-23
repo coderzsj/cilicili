@@ -142,9 +142,7 @@ public class UserController {
         log.info("进入了删除用户信息的接口 , 传入的报文为: {}" , uuid);
 
         int result = userService.deleteUser(uuid);
-
         ResponseBaseVo response;
-
         if (result ==0){
             response = new ResponseErrorVo();
             response.setErrorcode(0);

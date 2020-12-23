@@ -9,12 +9,12 @@ import com.yechrom.cloud.dto.vo.response.ResponseVo;
 import com.yechrom.cloud.service.BarrageService;
 import com.yechrom.cloud.service.UserService;
 import com.yechrom.cloud.service.VideoService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,14 +32,15 @@ public class BarrageController {
     VideoService   videoService;
 
 
-    @RequestMapping("/findId")
+    @PostMapping("/findId")
     @ResponseBody
     public ResponseBaseVo showBarrages(@RequestParam("id") Integer videoId) {
         ArrayList<Barrage> barrages = (ArrayList<Barrage>) barrageService.showBarrages(videoId);
-        if (barrages == null) {
+        if (CollectionUtils.isEmpty(barrages)) {
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
             response.setError("找不到该视频~");
+            return response;
         }
         //成功时返回
         ResponseVo response = new ResponseVo();
@@ -50,16 +51,16 @@ public class BarrageController {
         return response;
     }
 
-    @RequestMapping("/add")
+    @PostMapping("/add")
     @ResponseBody
-    public ResponseBaseVo addBarrage(Barrage barrage, String token) throws Exception {
+    public ResponseBaseVo addBarrage(@RequestBody Barrage barrage, String token) throws Exception {
         JSONObject    info = userService.getInfo(token);
         StringBuilder sb   = new StringBuilder();
         if (info == null) {
             sb.append("找不到该用户~");
         }
         if (barrage.getVideoId() == null) {
-            sb.append("视频 id 为空");
+            sb.append("视频id为空");
         } else {
             Video videoById = videoService.findVideoById(barrage.getVideoId());
             if (videoById == null) {
@@ -75,6 +76,7 @@ public class BarrageController {
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
             response.setError(sb.toString());
+            return response;
         }
 
         if (barrage.getColor() == null || barrage.getColor().length() == 0 || barrage.getColor().length() > 10) {
