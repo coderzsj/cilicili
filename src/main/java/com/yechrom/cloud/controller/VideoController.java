@@ -83,7 +83,7 @@ public class VideoController {
         } else if (video.getPicUrl().length() == 0 || video.getPicUrl().length() > 100) {
             sb.append("视频封面地址为空或超过100长度限制");
         }
-        if (StringUtils.isEmpty(sb)) {
+        if (StringUtils.isNotBlank(sb)) {
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
             response.setError(sb.toString());

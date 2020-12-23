@@ -12,16 +12,9 @@ import com.yechrom.cloud.service.UserService;
 import com.yechrom.cloud.service.VideoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController("/comment")
 public class CommentController {
@@ -55,9 +48,7 @@ public class CommentController {
 
     @PostMapping("/add")
     @ResponseBody
-    public ResponseBaseVo addComment(Comment comment, String token) throws Exception {
-        Map<String, Serializable> result = new HashMap<>();
-        result.put("status", "failure");
+    public ResponseBaseVo addComment(@RequestBody Comment comment, String token) throws Exception {
         JSONObject    info = userService.getInfo(token);
         StringBuilder sb   = new StringBuilder();
         if (info == null) {
@@ -76,7 +67,7 @@ public class CommentController {
         } else if (comment.getContent().length() == 0 || comment.getContent().length() > 250) {
             sb.append("评论内容为空或超过250长度限制");
         }
-        if (StringUtils.isEmpty(sb)) {
+        if (StringUtils.isNotBlank(sb)) {
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
             response.setError(sb.toString());
@@ -110,7 +101,7 @@ public class CommentController {
         if (result == 0) {
             sb.append("删除用户失败~");
         }
-        if (StringUtils.isEmpty(sb)) {
+        if (StringUtils.isNotBlank(sb)) {
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
             ((ResponseErrorVo) response).setError("删除用户失败~");
