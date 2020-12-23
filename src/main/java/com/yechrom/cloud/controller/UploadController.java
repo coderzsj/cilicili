@@ -10,22 +10,19 @@ import com.yechrom.cloud.util.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
-@Controller
+@RestController
+@RequestMapping("/upload")
 public class UploadController {
     @Autowired
     UserService userService;
 
 
-    @RequestMapping(value = "/upload/{token}", method = RequestMethod.POST)
-    @ResponseBody
+    @RequestMapping(value = "/{token}", method = RequestMethod.POST)
     public ResponseBaseVo upload(MultipartFile file, @PathVariable("token") String token) throws Exception {
         JSONObject    info = userService.getInfo(token);
         StringBuilder sb   = new StringBuilder();
@@ -49,7 +46,10 @@ public class UploadController {
             file.transferTo(storageFile);
         }
         if (StringUtils.isNotBlank(sb)){
-            ResponseErrorVo responseVo = new ResponseErrorVo();
+            ResponseErrorVo response = new ResponseErrorVo();
+            response.setErrorcode(0);
+            response.setError(sb.toString());
+            return response;
         }
         ResponseVo responseVo = new ResponseVo();
         responseVo.setErrorcode(1);

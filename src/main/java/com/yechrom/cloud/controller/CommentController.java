@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
-@RestController("/comment")
+@RestController
+@RequestMapping("/comment")
 public class CommentController {
     @Autowired
     CommentService commentService;
@@ -26,7 +27,6 @@ public class CommentController {
     VideoService   videoService;
 
     @PostMapping("/findId")
-    @ResponseBody
     public ResponseBaseVo showComments(@RequestParam("id") Integer videoId, Integer offset) {
         if (offset == null) {
             offset = 0;
@@ -47,7 +47,6 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    @ResponseBody
     public ResponseBaseVo addComment(@RequestBody Comment comment, String token) throws Exception {
         JSONObject    info = userService.getInfo(token);
         StringBuilder sb   = new StringBuilder();
@@ -85,7 +84,6 @@ public class CommentController {
     }
 
     @PostMapping("/delete")
-    @ResponseBody
     public ResponseBaseVo deleteComment(Integer id, String token) throws Exception {
         JSONObject    info    = userService.getInfo(token);
         Comment       comment = commentService.findCommentById(id);
@@ -114,7 +112,6 @@ public class CommentController {
     }
 
     @PostMapping("/like")
-    @ResponseBody
     public ResponseBaseVo likeComment(Integer id) {
         Comment comment = commentService.findCommentById(id);
         if (comment == null) {

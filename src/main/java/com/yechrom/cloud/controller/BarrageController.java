@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/barrage")
 public class BarrageController {
     @Autowired
@@ -31,9 +31,7 @@ public class BarrageController {
     @Autowired
     VideoService   videoService;
 
-
     @PostMapping("/findId")
-    @ResponseBody
     public ResponseBaseVo showBarrages(@RequestParam("id") Integer videoId) {
         ArrayList<Barrage> barrages = (ArrayList<Barrage>) barrageService.showBarrages(videoId);
         if (CollectionUtils.isEmpty(barrages)) {
@@ -52,7 +50,6 @@ public class BarrageController {
     }
 
     @PostMapping("/add")
-    @ResponseBody
     public ResponseBaseVo addBarrage(@RequestBody Barrage barrage, String token) throws Exception {
         JSONObject    info = userService.getInfo(token);
         StringBuilder sb   = new StringBuilder();

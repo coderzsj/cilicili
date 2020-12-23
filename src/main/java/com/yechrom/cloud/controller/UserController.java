@@ -22,15 +22,14 @@ import java.util.List;
  * 用户管理相关接口
  */
 @RestController
+@RequestMapping("/user")
 @Slf4j
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @PostMapping("/user/login")
-    @ResponseBody
-    @ApiOperation("login")
+    @PostMapping("/login")
     public ResponseBaseVo login(@RequestBody LoginVo loginVo) throws Exception {
         log.info("调用登录接口 , 传入的参数为 : {}" , loginVo.toString());
         String token = userService.login(loginVo);
@@ -57,9 +56,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/user/info")
-    @ResponseBody
-    @ApiOperation("根据token查询用户的接口")
+    @PostMapping("/info")
     public ResponseBaseVo getinfo( String token) throws Exception {
         log.info("用户调用获取信息接口 , 传入的参数为 token = {}" , token);
         JSONObject info = userService.getInfo(token);
@@ -73,8 +70,7 @@ public class UserController {
      * 用户退出登录
      * @return
      */
-    @PostMapping("/user/logout")
-    @ResponseBody
+    @PostMapping("/logout")
     public ResponseBaseVo logout(@RequestParam(value = "token") String token) throws Exception {
         log.info("用户调用登出接口 , 传入的token参数为 {} " , token);
         int result = userService.logout(token);
@@ -113,9 +109,7 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/user/update")
-    @ResponseBody
-    @ApiOperation("根据id更新用户的接口")
+    @PostMapping("/update")
     public ResponseBaseVo updateUser(@RequestBody UpdateUserVo requestVo) throws Exception {
         log.info("进入了更新用户信息的接口 , 传入的报文为: {}" , requestVo.toString());
         int result = userService.updateUser(requestVo);
@@ -134,8 +128,7 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("/user/delete")
-    @ResponseBody
+    @GetMapping("/delete")
     @CheckToken
     public ResponseBaseVo deleteUser(@RequestParam String uuid ) throws Exception {
 
@@ -157,9 +150,7 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/user/add")
-    @ResponseBody
-    @ApiOperation("添加用户的接口")
+    @PostMapping("/add")
     public ResponseBaseVo addUser(@RequestBody AddUserVo userVo) throws Exception {
         log.info("进入了添加用户信息的接口 , 传入的报文为: {}" , userVo.toString());
         int result = userService.addUser(userVo);
