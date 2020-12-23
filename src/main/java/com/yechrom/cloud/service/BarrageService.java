@@ -23,4 +23,8 @@ public class BarrageService {
     public List<Barrage> showBarrages(Integer videoId) {
         return barrageMapper.selectList(new QueryWrapper<Barrage>().eq("video_id",videoId));
     }
+
+    public int addBarrage(Barrage barrage) {
+        return barrageMapper.insert(barrage);
+    }
 }
