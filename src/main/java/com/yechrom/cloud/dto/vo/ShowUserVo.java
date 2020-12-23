@@ -8,11 +8,8 @@ import lombok.Data;
 @Data
 public class ShowUserVo {
 
-    private String uuid;
+    private Integer id;
     private String username;
     private String password;
-    private String name;
-    private String[] roles;
-    private String introduction;
-    private String avatar;
+    private String identity;
 }

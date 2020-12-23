@@ -1,12 +1,12 @@
 package com.yechrom.cloud.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yechrom.cloud.dto.pojo.User;
 import com.yechrom.cloud.dto.vo.*;
 import com.yechrom.cloud.dto.vo.response.ResponseBaseVo;
 import com.yechrom.cloud.dto.vo.response.ResponseErrorVo;
 import com.yechrom.cloud.dto.vo.response.ResponseVo;
 import com.yechrom.cloud.interceptor.CheckToken;
-import com.yechrom.cloud.service.HouseService;
 import com.yechrom.cloud.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -69,11 +69,8 @@ public class UserController {
     @CheckToken
     @ApiOperation("根据token查询用户的接口")
     public ResponseBaseVo getinfo(@RequestParam(value = "token") String token) throws Exception {
-
         log.info("用户调用获取信息接口 , 传入的参数为 token = {}" , token);
-
         JSONObject info = userService.getInfo(token);
-
         ResponseVo response = new ResponseVo();
         response.setErrorcode(1);
         response.setData(info);
@@ -118,7 +115,7 @@ public class UserController {
 
         log.info("调用了获取所有人员信息的接口.");
 
-        List<ShowUserVo> users = userService.show();
+        List<User> users = userService.show();
 
         ResponseVo response = new ResponseVo();
         JSONObject data = new JSONObject();

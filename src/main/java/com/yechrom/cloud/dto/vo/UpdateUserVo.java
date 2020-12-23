@@ -10,5 +10,5 @@ public class UpdateUserVo {
     private String name;
     private String password;
     private String introduction;
-    private String uuid;
+    private String id;
 }

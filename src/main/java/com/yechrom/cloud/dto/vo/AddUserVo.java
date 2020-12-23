@@ -7,10 +7,7 @@ import lombok.Data;
  */
 @Data
 public class AddUserVo {
-
-    private String name;
     private String username;
     private String password;
-    private String introduction;
-    private int roles;
+    private String identity;
 }
