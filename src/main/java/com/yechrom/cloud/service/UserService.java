@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class UserService {
 
-
     @Resource
     private UserMapper userMapper;
 
