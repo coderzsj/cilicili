@@ -9,6 +9,6 @@ import lombok.Data;
 public class UpdateUserVo {
     private String name;
     private String password;
-    private String introduction;
+    private String identity;
     private String id;
 }

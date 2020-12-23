@@ -100,8 +100,7 @@ public class UserController {
      */
     @GetMapping("/user/show")
     @ResponseBody
-    @CheckToken
-    public ResponseBaseVo showUsers(){
+    public ResponseBaseVo showUsers()   {
         log.info("调用了获取所有人员信息的接口.");
         List<User> users = userService.show();
         ResponseVo response = new ResponseVo();
@@ -116,7 +115,6 @@ public class UserController {
 
     @PostMapping("/user/update")
     @ResponseBody
-    @CheckToken
     @ApiOperation("根据id更新用户的接口")
     public ResponseBaseVo updateUser(@RequestBody UpdateUserVo requestVo) throws Exception {
         log.info("进入了更新用户信息的接口 , 传入的报文为: {}" , requestVo.toString());
@@ -163,7 +161,6 @@ public class UserController {
 
     @PostMapping("/user/add")
     @ResponseBody
-    @CheckToken
     @ApiOperation("添加用户的接口")
     public ResponseBaseVo addUser(@RequestBody AddUserVo userVo) throws Exception {
         log.info("进入了添加用户信息的接口 , 传入的报文为: {}" , userVo.toString());
