@@ -45,14 +45,10 @@ public class VideoController {
         log.info("调用视频接口 , 传入的参数为 : {}", id);
         Video video = videoService.findVideoById(id);
         if (video == null) {
-//            result.put("status", "failure");
-////            result.put("msg", "找不到该视频");
             ResponseErrorVo response = new ResponseErrorVo();
             response.setErrorcode(0);
             response.setError("找不到该视频~");
         }
-//            result.put("status", "success");
-//            result.put("video", video);
         //成功时返回
         ResponseVo response = new ResponseVo();
         JSONObject result   = new JSONObject();

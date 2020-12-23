@@ -6,6 +6,9 @@ package com.yechrom.cloud.util;
  * @Author zsj
  */
 public class BusinessConst {
+    public static final String STORAGE_DIR = "/home/hac/projects/cilicili/storage_server/storage/";
+    public static final long MAX_FILE_SIZE = 52428800L;
+
     public static String RETURN_CODE_SUCCESS = "success";
     public static String RETURN_CODE_ERROR = "error";
     public static String TYPE_SUCCESS = "success";
