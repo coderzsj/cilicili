@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @RestController("video")
 @Slf4j
-@Api(tags = "视频Controller")
+@Api(tags = "video-controller")
 public class VideoController {
     @Autowired
     UserService  userService;
@@ -41,7 +41,7 @@ public class VideoController {
     @PostMapping("/findVideoById")
     @ResponseBody
     @ApiOperation("根据id获取视频信息")
-    public ResponseBaseVo findVideoById(Integer id) {
+    public ResponseBaseVo findVideoById(@RequestBody Integer id) {
         log.info("调用视频接口 , 传入的参数为 : {}", id);
         Video video = videoService.findVideoById(id);
         if (video == null) {
@@ -62,26 +62,6 @@ public class VideoController {
         return response;
 
     }
-
-    @PostMapping("/show")
-    @ResponseBody
-    @ApiOperation("分页获取视频信息")
-    public ResponseBaseVo showVideos(@RequestBody ShowAllSellHouseVo requestVo) {
-        Page<Video>  page      = new Page<>(requestVo.getPage(), requestVo.getLimit());
-        Page<Video> videoPage = videoService.showVideos(page);
-        if (videoPage == null) {
-            ResponseErrorVo response = new ResponseErrorVo();
-            response.setErrorcode(0);
-            response.setError("找不到视频~");
-        }
-        ResponseVo response = new ResponseVo();
-        JSONObject result   = new JSONObject();
-        result.put("video", videoPage);
-        response.setErrorcode(1);
-        response.setData(result);
-        return response;
-    }
-
 
     @PostMapping("/add")
     @ResponseBody
@@ -127,7 +107,7 @@ public class VideoController {
 
     @PostMapping("/play")
     @ResponseBody
-    public ResponseBaseVo playVideo(Integer id) {
+    public ResponseBaseVo playVideo(@RequestBody Integer id) {
         Video          video = videoService.findVideoById(id);
         ResponseBaseVo response;
         video.setCountPlay(video.getCountPlay() + 1);
@@ -140,7 +120,7 @@ public class VideoController {
 
     @PostMapping("/like")
     @ResponseBody
-    public ResponseBaseVo likeVideo(Integer id) {
+    public ResponseBaseVo likeVideo(@RequestBody Integer id) {
         Video          video    = videoService.findVideoById(id);
         ResponseBaseVo response = new ResponseVo();
         video.setCountLike(video.getCountLike() + 1);
@@ -150,20 +130,46 @@ public class VideoController {
         return response;
     }
 
-//
-//    @RequestMapping("/find")
-//    @ResponseBody
-//
-//    public Map<String, Serializable> findVideos(Integer offset, String q) {
-//        Map<String, Serializable> result = new HashMap<>();
-//        if (offset == null) {
-//            offset = 0;
-//        }
-//        PageHelper.startPage(offset, 12);
-//        ArrayList<Video> videos   = (ArrayList<Video>) videoService.queryVideos(q);
-//        PageInfo<Video>  pageInfo = new PageInfo<>(videos);
-//        result.put("page", pageInfo);
-//        return result;
-//    }
-//
+    @PostMapping("/show")
+    @ResponseBody
+    @ApiOperation("分页获取视频信息")
+    public ResponseBaseVo showVideos(@RequestBody ShowAllSellHouseVo requestVo) {
+        Page<Video>  page      = new Page<>(requestVo.getPage(), requestVo.getLimit());
+        Page<Video> videoPage = videoService.showVideos(page);
+        if (videoPage == null) {
+            ResponseErrorVo response = new ResponseErrorVo();
+            response.setErrorcode(0);
+            response.setError("找不到视频~");
+        }
+        ResponseVo response = new ResponseVo();
+        JSONObject result   = new JSONObject();
+        result.put("video", videoPage);
+        response.setErrorcode(1);
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 分页查询视频信息通过关键字搜索
+     *
+     * @param requestVo
+     * @returns com.yechrom.cloud.dto.vo.response.ResponseBaseVo
+     */
+    @PostMapping("/find")
+    @ResponseBody
+    public ResponseBaseVo findVideos(@RequestBody ShowAllSellHouseVo requestVo) {
+        Page<Video>  page      = new Page<>(requestVo.getPage(), requestVo.getLimit());
+        Page<Video> videoPage =  videoService.queryVideos(requestVo.getKeyword(),page);
+        if (videoPage == null) {
+            ResponseErrorVo response = new ResponseErrorVo();
+            response.setErrorcode(0);
+            response.setError("找不到视频~");
+        }
+        ResponseVo response = new ResponseVo();
+        JSONObject result   = new JSONObject();
+        result.put("video", videoPage);
+        response.setErrorcode(1);
+        response.setData(result);
+        return response;
+    }
 }

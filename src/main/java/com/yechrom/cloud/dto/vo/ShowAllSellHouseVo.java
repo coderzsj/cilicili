@@ -10,4 +10,5 @@ public class ShowAllSellHouseVo {
 
     private int limit;
     private int page;
+    private String  keyword;
 }

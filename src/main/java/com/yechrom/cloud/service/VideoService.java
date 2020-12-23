@@ -7,8 +7,6 @@ import com.yechrom.cloud.dto.pojo.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
  * @Description TODO
  * @Date 2020/12/15 16:52
@@ -46,8 +44,9 @@ public class VideoService  {
     }
 
 
-    public List<Video> queryVideos(String keyword) {
-        return videoMapper.selectList(new QueryWrapper<Video>().like("title",keyword).like("description",keyword).like("upload_username",keyword));
+    public Page<Video> queryVideos(String keyword, Page<Video> page) {
+        QueryWrapper<Video> like = new QueryWrapper<Video>().or().like("title", keyword).or().like("description", keyword).or().like("upload_userid", keyword);
+        return videoMapper.selectPage(page,like);
     }
 
 
